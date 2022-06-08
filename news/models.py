@@ -3,22 +3,6 @@ import datetime as dt
 from django.contrib.auth.models import User
 from tinymce.models import HTMLField
 
-# Create your models here.
-# class Editor(models.Model):
-#     first_name = models.CharField(max_length =30)
-#     last_name = models.CharField(max_length =30)
-#     email = models.EmailField()
-#     phone_number = models.CharField(max_length = 10,blank =True)
-
-#     def __str__(self):
-#         return self.first_name
-    
-#     def save_editor(self):
-#         self.save()
-
-#     class Meta:
-#         ordering = ['first_name']
-
 class tags(models.Model):
     name = models.CharField(max_length =30)
 
@@ -52,3 +36,8 @@ class Article(models.Model):
 class NewsLetterRecipients(models.Model):
     name = models.CharField(max_length = 30)
     email = models.EmailField()
+
+class MoringaMerch(models.Model):
+    name = models.CharField(max_length=40)
+    description = models.TextField()
+    price = models.DecimalField(decimal_places=2, max_digits=20)

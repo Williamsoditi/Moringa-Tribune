@@ -6,6 +6,10 @@ from .forms import NewArticleForm, NewsLetterForm
 from .emails import send_welcome_email
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import MoringaMerch
+from .serializer import MerchSerializer
 
 # Create your views here.
 def welcome(request):
@@ -15,19 +19,6 @@ def news_today(request):
     date = dt.date.today()
     news = Article.todays_news()
     form = NewsLetterForm()
-
-    # if request.method == 'POST':
-    #     form = NewsLetterForm(request.POST)
-    #     if form.is_valid():
-    #         name = form.cleaned_data['your_name']
-    #         email = form.cleaned_data['email']
-    #         recipient = NewsLetterRecipients(name = name,email =email)
-    #         recipient.save()
-    #         send_welcome_email(name,email)
-
-    #         HttpResponseRedirect('news_today')
-    # else:
-    #     form = NewsLetterForm()
         
     return render(request, 'all-news/today-news.html', {"date": date,"news":news,"letterForm":form})
 
@@ -85,7 +76,7 @@ def new_article(request):
         form = NewArticleForm()
     return render(request, 'new_article.html', {"form": form})
 
-#AJAX
+#AJAX VIEW FN
 def newsletter(request):
     name = request.POST.get('your_name')
     email = request.POST.get('email')
@@ -95,3 +86,9 @@ def newsletter(request):
     send_welcome_email(name, email)
     data = {'success': 'You have been successfully added to mailing list'}
     return JsonResponse(data)
+
+class MerchList(APIView):
+    def get(self, request, format=None):
+        all_merch = MoringaMerch.objects.all()
+        serializers = MerchSerializer(all_merch, many=True)
+        return Response(serializers.data)
